@@ -1,0 +1,170 @@
+{    
+    "workflow_title": "Bank Reconciliation Exception Resolution",
+    "employees": [
+        {
+            "id": "EMPLOY_001",
+            "name": "Peter Parker",
+            "qualifications": ["Junior Financial Operations Analyst", "Junior Reconciliation Specialist"],
+            "authorization": ["Investigation", "Review"],
+            "availability_hours_per_week": 35
+        },
+        { 
+            "id": "EMPLOY_002",
+            "name": "Bruce Banner",
+            "qualifications": ["Quality Assurance Specialist", "Senior Financial Operations Analyst"],
+            "authorization": ["Investigation", "Review"],
+            "availability_hours_per_week": 30
+        },
+        {
+            "id": "EMPLOY_003",
+            "name": "Clark Kent",
+            "qualifications": ["Financial Operations Manager", "Compliance Reviewer"],
+            "authorization": ["Review", "Approval"],
+            "availability_hours_per_week": 20
+        },
+        {
+            "id": "EMPLOY_004",
+            "name": "Tony Stark",
+            "qualifications": ["Senior Approval Officer", "Chief Compliance Officer"],
+            "authorization": ["Approval"],
+            "availability_hours_per_week": 5
+        },
+        {
+            "id": "EMPLOY_005",
+            "name": "Barry Allen",
+            "qualifications": ["Fraud Operations Analyst", "Senior Reconciliation Specialist"],
+            "authorization": ["Investigation", "Closure"],
+            "availability_hours_per_week": 35
+        },
+        {
+            "id": "EMPLOY_006",
+            "name": "Steve Rogers",
+            "qualifications": ["Risk Operations Manager", "Authorized Approver"],
+            "authorization": ["Review", "Approval", "Closure"],
+            "availability_hours_per_week": 25
+        }
+    ],
+    "tasks": [
+        {
+            "id": "TASK_001",
+            "title": "Investigation",
+            "description": "Gathering financial data, flagging anomalies.",
+            "estimated_duration_hours": 10,
+            "prerequisites": []
+        },
+        {
+            "id": "TASK_002",
+            "title": "Review",
+            "description": "Analyzing flagged anomalies, preparing reports.",
+            "estimated_duration_hours": 15,
+            "prerequisites": ["TASK_001"]
+        },
+        {
+            "id": "TASK_003",
+            "title": "Approval",
+            "description": "Finalizing reports, ensuring compliance.",
+            "estimated_duration_hours": 5,
+            "prerequisites": ["TASK_002"]
+        },
+        {
+            "id": "TASK_004",
+            "title": "Closure",
+            "description": "Closing the case, documenting findings.",
+            "estimated_duration_hours": 8,
+            "prerequisites": ["TASK_003"]
+        }
+    ],
+    "processing_costs_per_hour": {
+        "EMPLOY_001": {
+            "TASK_001": 50.00,
+            "TASK_002": 65.00
+        },
+        "EMPLOY_002": {
+            "TASK_001": 70.00, 
+             "TASK_002": 95.00
+        },
+        "EMPLOY_003": {
+            "TASK_002": 110.00, 
+            "TASK_003": 155.00 
+        },
+        "EMPLOY_004": {
+            "TASK_003": 265.00
+        },
+        "EMPLOY_005": {
+            "TASK_001": 55.00,
+            "TASK_004": 75.00
+        },
+        "EMPLOY_006": {
+            "TASK_002": 90.00,
+            "TASK_003": 120.00,
+            "TASK_004": 100.00
+        }
+        
+    },
+    "corporate_rules": [
+        {
+              "rule_id": "RULE_001",
+              "title": "Solo Assignment",
+              "description": "Every required task must have exactly one assigned employee.",
+              "type": "exactly_one_employee_per_task" 
+        },
+        {
+              "rule_id": "RULE_002",
+              "title": "Qualifications and Availability",
+              "description": "Employees must be qualified and available for their assigned tasks.",
+              "type": "qualification_and_availability_check"
+        },
+        {
+              "rule_id": "RULE_003",
+              "title": "Separation of Duties",
+              "description": "The investigator and approver must be different employees.",
+              "type": "separation_of_duties_check",
+              "task_ids": ["TASK_001", "TASK_003"]
+        },
+        {
+              "rule_id": "RULE_004",
+              "title": "Mandatory Task Completion",
+              "description": "All four tasks are mandatory and cannot be skipped to reduce costs.",
+              "type": "mandatory_task_completion_check",
+              "task_ids": ["TASK_001", "TASK_002", "TASK_003", "TASK_004"]
+        },
+        {
+              "rule_id": "RULE_005",
+              "title": "Independent Review",
+              "description": "The investigator and reviewer must be different employees.",
+              "type": "separation_of_duties_check",
+              "task_ids": ["TASK_001", "TASK_002"]
+        },
+        {
+              "rule_id": "RULE_006",
+              "title": "Independent Approval",
+              "description": "The reviewer and approver must be different employees.",
+              "type": "separation_of_duties_check",
+              "task_ids": ["TASK_002", "TASK_003"]
+        }
+    ],
+    "baseline_assignments": {
+        "description": "Original, unoptimized corporate mapping of workflow.",
+        "assignments": [
+            {
+                "task_id": "TASK_001",
+                "assigned_employee_id": "EMPLOY_001"
+            },
+            {
+                "task_id": "TASK_002",
+                "assigned_employee_id": "EMPLOY_002"
+            },
+            {
+            "task_id": "TASK_003",
+            "assigned_employee_id": "EMPLOY_003"
+            },
+            {
+            "task_id": "TASK_004",
+            "assigned_employee_id": "EMPLOY_005"
+            }
+        ]
+    }
+}
+
+
+
