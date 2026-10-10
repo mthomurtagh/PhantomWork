@@ -104,4 +104,4 @@ PhantomWork is a prototype built around user-supplied financial workflow data.
 A hackathon project exploring financial operations, constrained optimization, internal controls, and operational resilience.
 
 ## License
-This project is Licensed under the MIT License. See the (LICENSE)(LICENSE) file for details.
+This project is Licensed under the MIT License. See the LICENSE file for details.
