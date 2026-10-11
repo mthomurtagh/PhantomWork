@@ -124,10 +124,8 @@ The disruption simulator temporarily removes an employee's availability and reca
 
 The dashboard displays the financial impact of the disruption, indepedently checks whether the new assignments follow implemented workplace rules, and compares employee assignments before and after the simulation.
 
-
-
 ## Demo
-*Demo video, application screenshots, demonstration link will be added here.*
+https://youtu.be/b_I_i1-bD5g
 
 ## Scope and Limitations
 PhantomWork is a prototype built around user-supplied financial workflow data.
