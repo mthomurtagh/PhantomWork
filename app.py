@@ -3,6 +3,7 @@ import streamlit as st
 from core.models import SimulationData
 from core.optimizer import optimize_assignments
 from core.verifier import verify_assignments
+from core.disruptions import simulate_employee_disruption
 st.set_page_config(page_title="PhantomWork Dashboard", layout="wide")
 st.title("PhantomWork")
 st.subheader("The Self-Auditing Financial Shadow Operations Engine")
@@ -18,6 +19,9 @@ except Exception as e:
     st.sidebar.error(f"Structural Validation Failed: {e}")
     st.stop()
 opt_result = optimize_assignments(scenario)
+if opt_result.status not in ("OPTIMAL", "FEASIBLE"):
+    st.error(f"Optimization failed: Solver status: {opt_result.status}")
+    st.stop()
 audit_result = verify_assignments(scenario, opt_result.assignments)
 
 # Calculates original cost, compares it with optimized costs to calculate monetary savings (percentage and dollar amounts).
@@ -69,3 +73,61 @@ else:
     for violation in audit_result.violations:
         st.markdown(f"\u274c {violation}")
 
+# Allows user to test how employee unavailability affects workflow assignments.
+st.markdown("## Disruption Simulator")
+st.write("Select an employee to simulate their availability")
+select_employee_name = st.selectbox(
+    "Select an unavailable employee:",
+    options=[e.name for e in scenario.employees]
+)
+if st.button("Simulate Employee Disruption"):
+    selected_employee_id = next(
+        e.id for e in scenario.employees
+        if e.name == select_employee_name
+    )
+
+    # Reoptimizes task assignments after removing the selected employee's availability.
+    disrupted_result, disrupted_scenario = simulate_employee_disruption(
+        scenario, selected_employee_id
+    )
+    if disrupted_result.status not in ("OPTIMAL", "FEASIBLE"):
+        st.error(
+            f"No replacement workflow found. Solver status: {disrupted_result.status}"
+        )
+        st.stop()
+    disrupted_audit = verify_assignments(
+        disrupted_scenario, disrupted_result.assignments
+    )
+    additional_cost = disrupted_result.total_cost - opt_result.total_cost
+    st.markdown("### Disruption Impact")
+    st.metric(
+        label="Reoptimized Workflow Cost",
+        value = f"${disrupted_result.total_cost:,.2f}",
+        delta=f"${additional_cost:,.2f} Additional Cost",
+        delta_color = "inverse"
+    )
+    if disrupted_audit.passed:
+        st.success("Disrupted Workflow Audit: PASSED")
+    else:
+        st.error("Disrupted Workflow Audit: FAILED")
+        for violation in disrupted_audit.violations:
+            st.write(f"\u274c {violation}")
+
+    # Compares task assignments before and after disruption.        
+    st.markdown("### Employee Reassignment Report")
+    disruption_table = []
+    for task in scenario.tasks:
+        task_id = task.id
+        previous_id = opt_result.assignments.get(task_id, "Unassigned")
+        new_id = disrupted_result.assignments.get(task_id, "Unassigned")
+        previous_name = employee_map.get(previous_id, previous_id)
+        new_name = employee_map.get(new_id, new_id)
+        disruption_table.append({
+                "Task": task.title,
+                "Pre-Disruption": previous_name,
+                "Post-Disruption": new_name,
+                "Status": "Reassigned" if previous_id != new_id else "Unchanged"
+
+            })
+    st.table(disruption_table)
+    
