@@ -80,14 +80,51 @@ A workflow is considered *optimal* only when solver establishes optimality withi
 |Hugging Face|AI-assisted policy and interpretation, if implemented|
 
 ## Installation and Usage 
-*Installation instructions will be added once the application is ready.*
-The intended workflow:
-1. Load a financial scenario.
-2. Review available staff tasks, costs, rules.
-3. Run the optimization.
-4. Inspect assignments, costs, verification results.
-5. Introduce an operational disruption.
-6. Compare with the original and revise workflows.
+### Requirements
+- Python 3.10 or newer
+- Streamlit
+- Google OR-Tools
+- Pydantic
+
+### Running PhantomWork
+1. Download or clone the Github Repository
+2. Open the PhantomWork project folder in terminal
+3. Insteall the following required dependecies:
+'''bash
+python -m pip install streamlit ortolls pydantic
+4. Launch the dashboard
+'''bash
+python -m streamlit run app.py
+'''
+5. Open the local URL provided by Streamlit.
+
+### Using the Dashboard
+1. PhantomWork automatically loads and validates the included sample financial workflow.
+2. Review the original workflow costs, optimized costs, and estimated savings.
+3. Examine the employee assignment comparison and indepedent assignment audit.
+4. Select an employee in the Disruption Simulator
+5. Click **Simulate Employee Disruption** to generate replacement assignments.
+6. Review the updated costs, audit results, and employee reassignment report.
+
+## Optimization Results
+| Metric | Result |
+|---|---:|
+| Original Workflow Cost | $3,300 |
+| Optimized Workflow Cost | $2,725 |
+| Estimated Savings | $575 |
+| Cost Reduction | 17.4% |
+
+## Disruption Simulation Results
+| Simulated Disruption | Reoptimized Cost | Additional Cost | Assignment Audit |
+|---|---|--:|---|
+| Peter Parker Unavailable | $3,175 | +$450 | Passed |
+| Barry Allen Unavailable | $3,075 | +$350 | Passed |
+
+The disruption simulator temporarily removes an employee's availability and recalculates task assignments under the implemented constraints.
+
+The dashboard displays the financial impact of the disruption, indepedently checks whether the new assignments follow implemented workplace rules, and compares employee assignments before and after the simulation.
+
+
 
 ## Demo
 *Demo video, application screenshots, demonstration link will be added here.*
